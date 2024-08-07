@@ -152,10 +152,13 @@ body {
   color: var(--black);
 }
 
-.main__navigation-item:hover {
+.main__navigation-item:hover,
+.main_item-marked {
   background-color: var(--black);
   color: var(--belyy);
 }
+
+
 
 .main__navigation-icon {
   width: 15px;

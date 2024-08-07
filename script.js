@@ -68,33 +68,54 @@ class StateApp {
     this.updateView();
   }
 
-  changeRoute(routeString) {
+  _changeRoute(routeString) {
     this.route = routeString;
+    location.replace(location.pathname + '?menu=' + routeString);
   }
 
   updateView() {
+    this._navigationHandler();
+
     switch (this.route) {
       case 'location':
         const menu = new LocationMenu(locationData);
         menu.appendLocation();
         this.currentView = menu;
         break;
+
       default:
         const noneElement = new NoneExistent();
         noneElement.addNoneExistent();
+        this.currentView = noneElement;
         break;
     }
   }
 
   _detectQueryParams() {
-    if (!location.search) return null;
+    if (!location.search) return location.replace(location.href + '?menu=things');
 
     const url = new URL(`${location.href}`);
     const query = url.searchParams.get('menu');
 
-    if(!query) return null;
+    if(!query) {
+      return location.search ? location.replace(location.href + '&menu=things') : location.replace(location.href + '?menu=things');
+    }
 
     return query;
+  }
+
+  _navigationHandler() {
+    const navItems = document.querySelectorAll('.main__navigation-item');
+
+    navItems.forEach(navItem => {
+      navItem.addEventListener('click', this._handleRoute.bind(this));
+    });
+  }
+
+  _handleRoute(event) {
+    event.stopPropagation();
+
+    this._changeRoute(event.target.dataset.item);
   }
 }
 
