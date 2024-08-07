@@ -77,7 +77,7 @@ class StateApp {
     this._navigationHandler();
 
     switch (this.route) {
-      case 'location':
+      case 'locations':
         const menu = new LocationMenu(locationData);
         menu.appendLocation();
         this.currentView = menu;
@@ -108,6 +108,12 @@ class StateApp {
     const navItems = document.querySelectorAll('.main__navigation-item');
 
     navItems.forEach(navItem => {
+      if (navItem.dataset.item === this.route) {
+        navItem.className = 'main__navigation-item main_item-marked';
+      } else {
+        navItem.className = 'main__navigation-item';
+      }
+
       navItem.addEventListener('click', this._handleRoute.bind(this));
     });
   }
