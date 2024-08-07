@@ -406,6 +406,94 @@ body {
   color: var(--grey);
 }
 
+/*Location records*/
+
+.main__location-records {
+  display: flex;
+  width: 100%;
+  margin-top: 43px;
+  flex-direction: column;
+  gap: 20px;
+}
+.main__record-block {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main__location-record {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+}
+
+.main__first-block {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.main__open-close {
+  width: 20px;
+  height: 20px;
+}
+
+.main__location-dots {
+  width: 4px;
+  height: 16px;
+}
+
+.main__location-name {
+  font-family: var(--futura-demi), sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  line-height: 120%;
+  color: var(--black);
+}
+
+.main__second-block {
+  display: flex;
+  height: 20px;
+  align-items: center;
+}
+
+.main__count-location {
+  font-family: var(--montserrat-regular), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--orange);
+}
+
+.main__third-block {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.main__record-edit,
+.main__delete-record {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+}
+
+.main__record-subscribe {
+  font-family: var(--montserrat-medium), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000;
+}
+
+.main__record-addition {
+  font-family: var(--montserrat-bold), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #000;
+}
 /* missing functional styles */
 
 .main__none-wrapper {

@@ -1,4 +1,4 @@
-const { log } = console;
+const { log, dir } = console;
 
 log('Script have been connected yet!!!');
 
@@ -64,6 +64,7 @@ const locationData = {
 class StateApp {
   constructor() {
     this.route = this._detectQueryParams();
+    this.currentView = null;
     this.updateView();
   }
 
@@ -76,6 +77,7 @@ class StateApp {
       case 'location':
         const menu = new LocationMenu(locationData);
         menu.appendLocation();
+        this.currentView = menu;
         break;
       default:
         const noneElement = new NoneExistent();
@@ -102,6 +104,7 @@ class LocationMenu {
     this.title = this._createTitleRoute();
     this.menu = this._createLocationMenu();
     this.bar = this._createLocationBar();
+    this.records = this._createLocationRecords();
   }
 
   appendLocation() {
@@ -109,6 +112,7 @@ class LocationMenu {
     container.appendChild(this.title);
     container.appendChild(this.menu);
     container.appendChild(this.bar);
+    container.appendChild(this.records);
   }
 
   _createTitleRoute() {
@@ -238,6 +242,18 @@ class LocationMenu {
     return wrapper;
   }
 
+  _createLocationRecords() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__location-records';
+
+    this.data.data.forEach(recordData => {
+      const record = new LocationRecord(0, recordData);
+      wrapper.appendChild(record.getRecord());
+    });
+
+    return wrapper;
+  }
+
 }
 
 class NoneExistent {
@@ -260,6 +276,184 @@ class NoneExistent {
 
   addNoneExistent() {
     document.querySelector('.main__block').appendChild(this.elem);
+  }
+}
+
+class LocationRecord {
+  constructor(lvl = 0, location) {
+    this.lvlNesting = lvl;
+    this.location = location;
+    this.listeners = [];
+    this.isShowSubTree = false;
+    this.record = this._createRecord();
+    this.subTree = this._createSubTree();
+  }
+
+  getRecord() {
+    this._addListeners();
+    return this.record;
+  }
+
+  _createRecord(){
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__record-block';
+
+    const record = document.createElement('div');
+    record.className = 'main__location-record';
+
+    const firstBlock = this._createFirstBlock();
+    const secondBlock = this._createSecondBlock();
+    const thirdBlock = this._createThirdBlock();
+
+    record.appendChild(firstBlock);
+    record.appendChild(secondBlock);
+    record.appendChild(thirdBlock);
+
+    record.style.marginLeft = this._calcMarginLeft();
+    wrapper.appendChild(record);
+
+    return wrapper;
+  }
+
+  _createSubTree() {
+    if (this.location.subTree.length === 0) return null;
+
+    return this.location.subTree.map(record => new LocationRecord(this.lvlNesting + 1, record));
+  }
+
+  _createFirstBlock() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__first-block';
+    //there must be a different logic here
+    if(this.lvlNesting < 2) {
+      const img = document.createElement('img');
+      img.className = 'main__open-close';
+      img.alt = 'Развёртывание поддерева';
+      img.src = './assets/svg/plus.svg';
+
+      wrapper.appendChild(img);
+    }
+
+    const img = document.createElement('img');
+    img.className = 'main__location-dots';
+    img.alt = 'Точки';
+    img.src = './assets/svg/dots.svg';
+
+    wrapper.appendChild(img);
+
+    const text = document.createElement('span');
+    text.className = 'main__location-name';
+    text.textContent = this.location.name;
+
+    wrapper.appendChild(text);
+
+    return wrapper;
+  }
+
+  _createSecondBlock() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__second-block';
+
+    const text = document.createElement('span');
+    text.className = 'main__count-location';
+    text.textContent = this.location.count;
+
+    wrapper.appendChild(text);
+
+    return wrapper;
+  }
+
+  _createThirdBlock() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__third-block';
+
+    if(this.lvlNesting === 0) {
+      let button = document.createElement('button');
+      button.className = 'main__record-edit';
+
+      let img = document.createElement('img');
+      img.className = 'main__edit-icon';
+      img.alt = 'Редактировать';
+      img.src = './assets/svg/pencil.svg';
+
+      button.appendChild(img);
+
+      let text = document.createElement('span');
+      text.className = 'main__edit-text';
+      text.textContent = 'Редактировать';
+
+      button.appendChild(text);
+      wrapper.appendChild(button);
+
+      button = document.createElement('button');
+      button.className = 'main__delete-record';
+
+      img = document.createElement('img');
+      img.className = 'main__delete-icon';
+      img.alt = 'Удалить';
+      img.src = './assets/svg/delete.svg';
+
+      text = document.createElement('span');
+      text.className = 'main__delete-text';
+      text.textContent = 'Удалить';
+
+      button.appendChild(img);
+      button.appendChild(text);
+      wrapper.appendChild(button);
+
+      return wrapper;
+    }
+
+    if (this.location.subscribe) {
+      const text = document.createElement('span');
+      text.className = 'main__record-subscribe';
+      text.textContent = this.location.subscribe;
+
+      wrapper.appendChild(text);
+    }
+
+    if (this.location.addition) {
+      const text = document.createElement('span');
+      text.className = 'main__record-addition';
+      text.textContent = this.location.addition;
+
+      wrapper.appendChild(text);
+    }
+
+    return wrapper;
+  }
+
+  _calcMarginLeft() {
+    if (this.lvlNesting === 0) return '0px';
+
+    return `${this.lvlNesting * 45}px`;
+  }
+
+  _addListeners() {
+    if (this.location.subTree) {
+      const imagePlus = this.record.getElementsByClassName('main__open-close');
+      if(imagePlus.length === 0) return;
+      if (this.subTree) {
+        imagePlus[0].addEventListener('click', this._clickHandler.bind(this));
+      }
+    }
+  }
+
+  _clickHandler(event) {
+    event.stopPropagation();
+    const target = event.target;
+
+    if (this.subTree.length === 0) return;
+
+    if (!this.isShowSubTree) {
+      this.isShowSubTree = true;
+      target.src = './assets/svg/minus.svg';
+      return this.subTree.forEach(subRecord => this.record.appendChild(subRecord.getRecord()));
+    }
+
+    this.isShowSubTree = false;
+    target.src = './assets/svg/plus.svg';
+    this.subTree.forEach(record => record.getRecord().remove());
   }
 }
 
