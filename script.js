@@ -61,6 +61,129 @@ const locationData = {
   ]
 };
 
+//Mocked data settings
+const settingsData = {
+  fields: [
+    {
+      name: 'Название',
+      description: true,
+      count: 500,
+      id: 1001,
+      type: {
+        name: 'Строка',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: false
+    },
+    {
+      name: 'Цена',
+      description: false,
+      count: 510,
+      id: 1002,
+      type: {
+        name: 'Число',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'МОЛ',
+      description: false,
+      count: 520,
+      id: 1003,
+      type: {
+        name: 'Справочник',
+        icon: true
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'Фото',
+      description: false,
+      count: 530,
+      id: 1004,
+      type: {
+        name: 'Файл',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'Цвет',
+      description: false,
+      count: 540,
+      id: 1005,
+      type: {
+        name: 'Строка',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'Локация',
+      description: false,
+      count: 550,
+      id: 1006,
+      type: {
+        name: 'Справочник',
+        icon: true
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'Количество',
+      description: false,
+      count: 560,
+      id: 1007,
+      type: {
+        name: 'Число',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'Описание',
+      description: false,
+      count: 570,
+      id: 1008,
+      type: {
+        name: 'Текст',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+    {
+      name: 'Количество',
+      description: false,
+      count: 580,
+      id: 1009,
+      type: {
+        name: 'Число',
+        icon: false
+      },
+      inTable: true,
+      required: true,
+      deleted: true
+    },
+  ]
+};
+
 class StateApp {
   constructor() {
     this.route = this._detectQueryParams();
@@ -81,7 +204,11 @@ class StateApp {
         menu.appendLocation();
         this.currentView = menu;
         break;
-
+      case 'settings':
+        const settings = new Settings(settingsData);
+        settings.showSettings();
+        this.currentView = settings;
+        break;
       default:
         const noneElement = new NoneExistent();
         noneElement.addNoneExistent();
@@ -983,6 +1110,432 @@ class PopUpCreate {
     if(target.className === 'popup__wrapper') this.showPopUp();
   }
 
+}
+
+class Settings {
+  constructor(tableSettings) {
+    this.tableSettings = tableSettings;
+    this.settings = this._createSettings();
+  }
+
+  showSettings() {
+    const container = document.querySelector('.main__block');
+
+    if (container.children.length !== 0) {
+      container.children[0].remove();
+    }
+
+    container.appendChild(this.settings);
+
+    const footerSettings = new FooterButton();
+
+    footerSettings.showFooterButtons();
+  }
+
+  _createSettings() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__block-settings';
+
+    const title = document.createElement('h2');
+    title.className = 'main__route';
+    title.textContent = 'Настройки / Локации';
+
+    wrapper.appendChild(title);
+
+    const btnBlock = this._createButtonBlock();
+
+    wrapper.appendChild(btnBlock);
+
+    const tableClass = new SettingsTable(this.tableSettings);
+
+    wrapper.appendChild(tableClass.getTable());
+    return wrapper;
+  }
+
+  _createButtonBlock() {
+    const btnNames = [
+      {
+        name: 'Имущество',
+        className: 'main__btn-things'
+      },
+      {
+        name: 'Инвентаризация',
+        className: 'main__btn-inventory'
+      },
+      {
+        name: 'Сотрудники',
+        className: 'main__btn-workers'
+      },
+      {
+        name: 'Локации',
+        className: 'main__btn-locations'
+      },
+      {
+        name: 'Уведомления',
+        className: 'main__btn-notifications'
+      },
+      {
+        name: 'Справочники',
+        className: 'main__btn-handbooks'
+      },
+      {
+        name: 'Пользователь',
+        className: 'main__btn-user'
+      },
+    ];
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__settings-buttons';
+
+    btnNames.forEach(btn => {
+      const button = document.createElement('button');
+      button.className = btn.className;
+
+      const text = document.createElement('span');
+      text.className = 'main__buttons-text';
+      text.textContent = btn.name;
+
+      button.appendChild(text);
+      wrapper.appendChild(button);
+    })
+
+    return wrapper;
+  }
+}
+
+class SettingsTable {
+  constructor(data) {
+    this.data = data;
+    this.colClasses = [
+      'main__col-names',
+      'main__col-description',
+      'main__col-sort',
+      'main__id',
+      'main__type',
+      'main__col-intable',
+      'main__col-required',
+      'main__col-deleted'
+    ];
+    this.table = this._createTable();
+  }
+
+  getTable() {
+    return this.table;
+  }
+
+  _createTable() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'main__settings';
+
+    const title = document.createElement('h2');
+    title.className = 'main__settings-title';
+    title.textContent = 'Настройка полей таблицы';
+
+    wrapper.appendChild(title);
+
+    const tableContainer = document.createElement('div');
+    tableContainer.className = 'main__table-content';
+
+    const headers = this._createTableHeader();
+
+    headers.forEach(header => tableContainer.appendChild(header));
+
+    this.data.fields.forEach(item => {
+      const recordSetting = new SettingRecord(item, this.colClasses);
+      const recordsElems = recordSetting.getRecords();
+
+      recordsElems.forEach(elem => tableContainer.appendChild(elem));
+    });
+
+    wrapper.appendChild(tableContainer);
+
+    const button = document.createElement('button');
+    button.className = 'main__table-add';
+
+    const img = document.createElement('img');
+    img.className = 'main__table-add-icon';
+    img.alt = '';
+    img.src = './assets/svg/add.svg';
+
+    button.appendChild(img);
+
+    const text = document.createElement('span');
+    text.className = 'main__table-add-text';
+    text.textContent = 'Добавить поле';
+
+    button.appendChild(text);
+
+    wrapper.appendChild(button);
+
+    return wrapper;
+  }
+
+  _createTableHeader() {
+    const titles = [
+      '',
+      'Описание',
+      'Сортировка',
+      'ID',
+      'Тип поля',
+      'Выводить в таблицу',
+      'Обязательно',
+      'Удалить'
+    ];
+
+    return titles.map((title, index) => {
+      const elem = document.createElement('div');
+      elem.className = this.colClasses[index];
+
+      if (title) {
+        const text = document.createElement('span');
+        text.className = 'main__table-header';
+        text.textContent = title;
+        elem.appendChild(text);
+      }
+
+      return elem;
+    })
+  }
+
+}
+
+class SettingRecord {
+  constructor(record, classNames) {
+    this.classNames = classNames;
+    this.record = this._createRecord(record);
+  }
+
+  getRecords() {
+    return this.record;
+  }
+
+  _createRecord(record) {
+    // {
+    //   name: 'Название',
+    //   description: true,
+    //   count: 500,
+    //   id: 1001,
+    //   type: {
+    //     name: 'Строка',
+    //     icon: false
+    //   },
+    //   inTable: true,
+    //   required: true,
+    //   deleted: false
+    // }
+
+    const recordArr = [];
+
+    recordArr.push(this._createNameCol(record.name));
+    recordArr.push(this._createDescriptionCol(record.description));
+    recordArr.push(this._createSortCol(record.count));
+    recordArr.push(this._createIDCol(record.id));
+    recordArr.push(this._createTypeCol(record.type));
+    recordArr.push(this._createInTableCol(record.inTable));
+    recordArr.push(this._createRequiredCol(record.required));
+    recordArr.push(this._createDeletedCol(record.deleted));
+
+    return recordArr;
+  }
+
+  _createNameCol(name) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[0];
+
+    let img = document.createElement('img');
+    img.className = 'main__name-dots';
+    img.alt = '';
+    img.src = './assets/svg/dots.svg';
+
+    wrapper.appendChild(img);
+
+    const text = document.createElement('span');
+    text.className = 'main__name-text';
+    text.textContent = name;
+
+    wrapper.appendChild(text);
+
+    img = document.createElement('img');
+    img.className = 'main__name-pencil';
+    img.alt = '';
+    img.src = './assets/svg/pencil.svg';
+
+    wrapper.appendChild(img);
+
+    return wrapper;
+  }
+
+  _createDescriptionCol(desription) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[1];
+
+    if (desription) {
+      const img = document.createElement('img');
+      img.className = 'main__description-table';
+      img.alt = '';
+      img.src = './assets/svg/help.svg';
+
+      wrapper.appendChild(img);
+    }
+
+    return wrapper;
+  }
+
+  _createSortCol(number) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[2];
+
+    const text = document.createElement('span');
+    text.className = 'main__sort-text';
+    text.textContent = number;
+
+    wrapper.appendChild(text);
+
+    return wrapper;
+  }
+
+  _createIDCol(id) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[3];
+
+    const text = document.createElement('span');
+    text.className = 'main__id-text';
+    text.textContent = id;
+
+    wrapper.appendChild(text);
+
+    return wrapper;
+  }
+
+  _createTypeCol(type) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[4];
+
+    const text = document.createElement('span');
+    text.className = 'main__type-text';
+    text.textContent = type.name;
+
+    wrapper.appendChild(text);
+
+    if (type.icon) {
+      const img = document.createElement('img');
+      img.className = 'main__type-icon';
+      img.alt = '';
+      img.src = './assets/svg/file.svg';
+
+      wrapper.appendChild(img);
+    }
+
+    return wrapper;
+  }
+
+  _createInTableCol(inTable) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[5];
+
+    if(inTable) {
+
+      const box = document.createElement('div');
+      box.className = 'main__intable-box';
+
+      const input = document.createElement('input');
+      input.className = 'main__intable-checkbox';
+      input.type = 'checkbox';
+      input.checked = true;
+
+      box.appendChild(input);
+      wrapper.appendChild(box);
+    }
+
+    return wrapper;
+  }
+
+  _createRequiredCol(required) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[6];
+
+    if(required) {
+      const box = document.createElement('div');
+      box.className = 'main__required-box';
+
+      const input = document.createElement('input');
+      input.className = 'main__required-checkbox';
+      input.type = 'checkbox';
+      input.checked = true;
+
+      box.appendChild(input);
+      wrapper.appendChild(box);
+    }
+
+    return wrapper;
+  }
+
+  _createDeletedCol(isDeleted) {
+    const wrapper = document.createElement('div');
+    wrapper.className = this.classNames[7];
+
+    if(isDeleted) {
+      const box = document.createElement('div');
+      box.className = 'main__deleted-box';
+
+      const input = document.createElement('input');
+      input.className = 'main__deleted-checkbox';
+      input.type = 'checkbox';
+      input.checked = true;
+
+      box.appendChild(input);
+      wrapper.appendChild(box);
+    }
+
+    return wrapper;
+  }
+}
+
+class FooterButton {
+  constructor() {
+    this.buttons = this._createButtons();
+  }
+
+  showFooterButtons() {
+    const footer = document.querySelector('.footer');
+    footer.querySelector('.footer__information').remove();
+    footer.querySelector('.footer__documentation').before(this.buttons);
+  }
+
+  _createButtons() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'footer__settings-block';
+
+    let button = document.createElement('button');
+    button.className = 'footer__btn-save';
+
+    const img = document.createElement('img');
+    img.className = 'footer__save-img';
+    img.alt = '';
+    img.src = './assets/svg/save.svg';
+
+    button.appendChild(img);
+
+    let text = document.createElement('span');
+    text.className = 'footer__save-text';
+    text.textContent = 'Сохранить';
+
+    button.appendChild(text);
+
+    wrapper.appendChild(button);
+
+    button = document.createElement('button');
+    button.className = 'footer__deny';
+
+    text = document.createElement('span');
+    text.className = 'footer__deny-text';
+    text.textContent = 'Отменить';
+
+    button.appendChild(text);
+    wrapper.appendChild(button);
+
+    return wrapper;
+  }
 }
 
 const state = new StateApp();

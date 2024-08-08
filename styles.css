@@ -213,15 +213,18 @@ button {
 }
 
 .footer {
+  display: flex;
   width: 100%;
   height: 80px;
+  justify-content: space-between;
   background-color: var(--belyy);
 }
 
 .footer__information {
   display: flex;
-  width: 100%;
+  width: 80%;
   height: inherit;
+  margin-left: 10%;
   justify-content: center;
   align-items: center;
   gap: 30px;
@@ -233,6 +236,29 @@ button {
   font-size: 12px;
   color: #a5a5a5;
   cursor: default;
+}
+
+.footer__documentation {
+  display: flex;
+  width: 10%;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+}
+
+.footer__doc-img {
+  width: 17px;
+  height: 19px;
+}
+
+.footer__doc-text {
+  font-family: var(--montserrat-regular), sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  margin-right: 30px;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: var(--orange);
 }
 
 /* Main view styles */
@@ -924,4 +950,289 @@ button {
   text-transform: uppercase;
   text-align: center;
   color: var(--belyy);
+}
+
+/*Table and settings styles*/
+
+.main__block-settings {
+  display: flex;
+  flex-direction: column;
+}
+
+.main__settings-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.main__settings-buttons button {
+  display: flex;
+  height: 37px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border: none;
+  color: var(--black);
+  background: var(--belyy);
+}
+
+.main__settings-buttons button:hover {
+  color: var(--belyy);
+  background: var(--black);
+}
+
+.main__btn-things {
+  width: 140px;
+}
+
+.main__btn-inventory {
+  width: 178px;
+}
+
+.main__btn-workers {
+  width: 160px;
+}
+
+.main__btn-locations,
+.main__btn-notifications,
+.main__btn-handbooks,
+.main__btn-user {
+  width: 132px;
+}
+
+.main__buttons-text {
+  font-family: var(--futura-medium), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.main__settings {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.main__settings-title {
+  margin: 32px 0 5px;
+  font-family: var(--futura-demi), sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 100%;
+  color: #000;
+}
+
+.main__table-content {
+  display: grid;
+  grid-template-columns: 1fr 7% 9% 5% 10% 13% 8% 8%;
+  grid-auto-rows: 60px;
+  align-items: center;
+}
+
+.main__col-names,
+.main__col-description,
+.main__col-sort,
+.main__id,
+.main__type,
+.main__col-intable,
+.main__col-required,
+.main__col-deleted {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+.main__col-names {
+  padding-left: 30px;
+  gap: 10px;
+}
+
+.main__col-names:nth-child(16n+9),
+.main__col-description:nth-child(16n+10),
+.main__col-sort:nth-child(16n+11),
+.main__id:nth-child(16n+12),
+.main__type:nth-child(16n+13),
+.main__col-intable:nth-child(16n+14),
+.main__col-required:nth-child(16n+15),
+.main__col-deleted:nth-child(16n+16) {
+  background-color: var(--belyy);
+}
+
+.main__table-header {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-family: var(--montserrat-regular), sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 130%;
+  color: #000;
+}
+
+.main__name-text {
+  font-family: var(--montserrat-bold),sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000;
+}
+
+.main__name-dots {
+  width: 4px;
+  height: 16px;
+}
+
+.main__name-pencil {
+  width: 12px;
+  height: 12px;
+}
+
+.main__description-table {
+  width: 24px;
+  height: 24px;
+}
+
+.main__sort-text {
+  display: inline-block;
+  text-align: center;
+  width: 81px;
+  height: 22px;
+  padding-top: 7px;
+  font-family: var(--montserrat-regular), sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000;
+  border: 1px solid #efefef;
+  border-radius: 5px;
+  background-color: var(--belyy);
+}
+
+.main__type {
+  display: flex;
+  gap: 6px;
+}
+
+.main__id-text,
+.main__type-text {
+  font-family: var(--montserrat-regular), sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #000;
+}
+
+.main__intable-checkbox,
+.main__required-checkbox,
+.main__deleted-checkbox {
+  appearance: none;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  border: 1px solid var(--orange);
+  background: var(--belyy);
+}
+
+.main__intable-checkbox::after,
+.main__required-checkbox::after,
+.main__deleted-checkbox::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 4px;
+  width: 0;
+  height: 0;
+  background-image: url(./assets/svg/check.svg);
+  background-repeat: no-repeat;
+}
+
+.main__intable-checkbox:checked::after,
+.main__required-checkbox:checked::after,
+.main__deleted-checkbox:checked::after {
+  width: 10px;
+  height: 8px;
+}
+
+.main__intable-checkbox:checked,
+.main__required-checkbox:checked,
+.main__deleted-checkbox:checked {
+  background: var(--orange);
+}
+
+.main__table-add {
+  display: flex;
+  width: 255px;
+  height: 50px;
+  margin-top: 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-radius: 5px;
+  color: var(--belyy);
+  background: var(--black);
+}
+
+.main__table-add-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.main__table-add-text {
+  font-family: var(--futura-demi),sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.footer__settings-block {
+  display: flex;
+  margin-left: 275px;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer__btn-save {
+  display: flex;
+  width: 198px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+  background: var(--black);
+}
+
+.footer__save-img {
+  width: 15px;
+  height: 14px;
+}
+
+.footer__save-text {
+  font-family: var(--futura-demi), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--belyy);
+}
+
+.footer__deny {
+  display: flex;
+  width: 194px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+}
+
+.footer__deny-text {
+  font-family: var(--futura-demi), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--black);
 }
