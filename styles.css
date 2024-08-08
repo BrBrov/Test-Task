@@ -1232,6 +1232,7 @@ button {
   align-items: center;
   border: 1px solid var(--black);
   border-radius: 5px;
+  background: var(--belyy);
 }
 
 .footer__deny-text {
