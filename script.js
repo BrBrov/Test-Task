@@ -641,7 +641,7 @@ class PopUpCreate {
     popupWrapper.addEventListener('wheel', (event) => event.preventDefault());
     popupWrapper.addEventListener('click', this._clickAroundForClose.bind(this));
 
-    document.querySelector('.container').appendChild(popupWrapper);
+    document.querySelector('.container').before(popupWrapper);
   }
 
   _createPopUp() {
